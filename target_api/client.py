@@ -20,7 +20,7 @@ class ApiSink(HotglueBaseSink):
         return (
             ApiAuthenticator(
                 self._target,
-                header_name=self._config.get("api_key_header") or "x-api-key",
+                header_name=self._config.get("api_key_header") or "api-key",
             )
             if self._config.get("auth", False) or self._config.get("api_key_url")
             else None
@@ -45,7 +45,7 @@ class ApiSink(HotglueBaseSink):
 
         if self._config.get("api_key_url"):
             base_url += (
-                f"?{self._config.get('api_key_header')}={self._config.get('api_key')}"
+                f"?{self._config.get('api_key_header') or 'api-key'}={self._config.get('api_key')}"
             )
 
         return base_url
