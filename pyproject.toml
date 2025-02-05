@@ -49,4 +49,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 # CLI declaration
 target-api = 'target_api.target:TargetApi.cli'
-target-driftrock = 'target_api.target:TargetApi.cli'
+target-adobemarketo = 'target_api.target:TargetApi.cli'

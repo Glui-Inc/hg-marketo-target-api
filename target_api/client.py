@@ -9,22 +9,43 @@ import requests
 from singer_sdk.exceptions import FatalAPIError, RetriableAPIError
 from curlify import to_curl
 
+from target_api.auth import MarketoApiKeyAuthenticator, MarketoAuthenticator
+
 
 class ApiSink(HotglueBaseSink):
     @property
     def name(self):
         return self.stream_name
+    
+
+    auth_state = {}
 
     @property
     def authenticator(self):
-        return (
-            ApiAuthenticator(
-                self._target,
-                header_name=os.environ.get("CUSTOM_INTEGRATION_DEFAULT_API_KEY", "x-api-key"),
-            )
-            if self._config.get("auth", False) or self._config.get("api_key_url")
-            else None
-        )
+        self.logger.info("+++++++++++++++++ CONFIG URL in AUTHENTICATOR")
+        self.logger.info(self._config["url"])
+        # auth with hapikey
+        if self.config.get("api_private_key"):
+            api_key = self.config.get("api_private_key")
+            return MarketoApiKeyAuthenticator(self._target, api_key)
+        # auth with acces token
+        # url = "https://a.klaviyo.com/oauth/token"
+        client_id = os.environ.get("client_id")
+        secret_id = os.environ.get("secret_id")
+        # url = "GET <Identity URL>/oauth/token?grant_type=client_credentials&client_id=<Client Id>&client_secret=<Client Secret>"
+        url = f"https://api.playrcart.com/oauth-token?test=apitest&grant_type=client_credentials&client_id={client_id}&client_secret={secret_id}"
+        return MarketoAuthenticator(self._target, self.auth_state, url)
+    
+    # @property
+    # def authenticator(self):
+    #     return (
+    #         ApiAuthenticator(
+    #             self._target,
+    #             header_name=os.environ.get("CUSTOM_INTEGRATION_DEFAULT_API_KEY", "x-api-key"),
+    #         )
+    #         if self._config.get("auth", False) or self._config.get("api_key_url")
+    #         else None
+    #     )
 
     @property
     def base_url(self) -> str:
@@ -33,6 +54,8 @@ class ApiSink(HotglueBaseSink):
         tap = os.environ.get("TAP", None)
         connector_id = os.environ.get("CONNECTOR_ID", None)
 
+        self.logger.info("+++++++++++++++++ CONFIG URL in BASE URL")
+        self.logger.info(self._config["url"])
         base_url = self._config["url"].format(
             stream=self.stream_name,
             tenant=tenant_id,
