@@ -28,7 +28,6 @@ class MarketoAuthenticator:
         self._auth_params: Dict[str, Any] = {}
         self.logger: logging.Logger = target.logger
         self._auth_endpoint = auth_endpoint
-        self._config_file = target.config_file
         self._target = target
         self.state = state
 
@@ -49,8 +48,13 @@ class MarketoAuthenticator:
         }
 
     def is_token_valid(self) -> bool:
+        """Check if the current access token is valid and not expired.
+
+        Returns:
+            bool: True if token is valid and not near expiration, False otherwise.
+        """
         access_token = self._config.get("access_token")
-        now = round(datetime.utcnow().timestamp())
+        now = round(datetime.now(datetime.UTC).timestamp())
         expires_in = self._config.get("expires_in")
         if expires_in is not None:
             expires_in = int(expires_in)
@@ -86,7 +90,7 @@ class MarketoAuthenticator:
         self.access_token = token_json["access_token"]
         self._config["access_token"] = token_json["access_token"]
         self._config["refresh_token"] = token_json["refresh_token"]
-        now = round(datetime.utcnow().timestamp())
+        now = round(datetime.now(datetime.UTC).timestamp())
         self._config["expires_in"] = now + token_json["expires_in"]
 
         with open(self._target.config_file, "w") as outfile:
@@ -100,4 +104,9 @@ class MarketoApiKeyAuthenticator:
 
     @property
     def auth_headers(self):
+        """Get the authentication headers for API requests.
+        
+        Returns:
+            dict: Headers containing the API key authentication.
+        """
         return {"Authorization": f"Klaviyo-API-Key {self.api_key}"}
