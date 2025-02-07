@@ -102,8 +102,8 @@ class MarketoAuthenticator:
         # now = round(datetime.now(datetime.UTC).timestamp())
         self._config["expires_in"] = now + token_json["expires_in"]
 
-        with open(self._target.config_file, "w") as outfile:
-            json.dump(self._config, outfile, indent=4)
+        # with open(self._target.config_file, "w") as outfile:
+        #     json.dump(self._config, outfile, indent=4)
 
 
 class MarketoApiKeyAuthenticator:

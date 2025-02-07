@@ -30,8 +30,8 @@ class ApiSink(HotglueBaseSink):
             return MarketoApiKeyAuthenticator(self._target, api_key)
         # auth with acces token
         # url = "https://a.klaviyo.com/oauth/token"
-        client_id = os.environ.get("client_id")
-        secret_id = os.environ.get("secret_id")
+        client_id = self._target.config["client_id"]
+        secret_id = self._target.config["secret_id"]
         # url = "GET <Identity URL>/oauth/token?grant_type=client_credentials&client_id=<Client Id>&client_secret=<Client Secret>"
         url = f"https://api.playrcart.com/oauth-token.php?test=apitest&grant_type=client_credentials&client_id={client_id}&client_secret={secret_id}"
         self.logger.info('++++++++ SELF TARGET CONFIG')
