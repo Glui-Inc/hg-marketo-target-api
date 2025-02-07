@@ -31,7 +31,7 @@ class ApiSink(HotglueBaseSink):
         # auth with acces token
         # url = "https://a.klaviyo.com/oauth/token"
         client_id = self.config.get("client_id")
-        secret_id = self.config.get("secret_id")
+        secret_id = self.config.get("client_secret")
         # url = "GET <Identity URL>/oauth/token?grant_type=client_credentials&client_id=<Client Id>&client_secret=<Client Secret>"
         url = f"https://api.playrcart.com/oauth-token.php?test=apitest&grant_type=client_credentials&client_id={client_id}&client_secret={secret_id}"
         self.logger.info('++++++++ SELF TARGET CONFIG')

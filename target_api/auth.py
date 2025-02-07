@@ -38,6 +38,8 @@ class MarketoAuthenticator:
         self.update_access_token()
         result = {}
         result["Authorization"] = f"Bearer {self._config.get('access_token')}"
+        self.logger.info("+++++++++++++++++ AUTHORIZATIOn - AUTH HEADER - RESULT")
+        self.logger.info(result)
         return result
 
     @property
