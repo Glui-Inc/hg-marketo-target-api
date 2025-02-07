@@ -133,5 +133,10 @@ class ApiSink(HotglueBaseSink):
             "revision": "2023-07-15",
             "content-type": "application/json",
         }
+        self.logger.info("++++++++++++++++++++ HEADERS")
+        self.logger.info(headers)
         headers.update(self.authenticator.auth_headers or {})
+        self.logger.info("++++++++++++++++++++ HEADERS 2")
+        self.logger.info(headers)
+        headers["Authorization"] = "Bearer 1234567890"
         return headers
