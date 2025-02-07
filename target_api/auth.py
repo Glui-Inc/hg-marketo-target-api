@@ -57,7 +57,8 @@ class MarketoAuthenticator:
         self.logger.info("++++++++++++ACCESS TOKEN")
         self.logger.info(self._config.get("access_token"))
         access_token = self._config.get("access_token")
-        now = round(datetime.now(datetime.UTC).timestamp())
+        now = round(datetime.utcnow().timestamp())
+        # now = round(datetime.now(datetime.UTC).timestamp())
         expires_in = self._config.get("expires_in")
         self.logger.info("++++++++++++EXPIRES IN")
         self.logger.info(expires_in)
@@ -97,7 +98,8 @@ class MarketoAuthenticator:
         self.access_token = token_json["access_token"]
         self._config["access_token"] = token_json["access_token"]
         self._config["token_type"] = token_json["token_type"]
-        now = round(datetime.now(datetime.UTC).timestamp())
+        now = round(datetime.utcnow().timestamp())
+        # now = round(datetime.now(datetime.UTC).timestamp())
         self._config["expires_in"] = now + token_json["expires_in"]
 
         with open(self._target.config_file, "w") as outfile:
