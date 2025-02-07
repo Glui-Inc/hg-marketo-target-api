@@ -33,8 +33,9 @@ class MarketoAuthenticator:
 
     @property
     def auth_headers(self) -> dict:
-        if not self.is_token_valid():
-            self.update_access_token()
+        # if not self.is_token_valid():
+        self.is_token_valid()
+        self.update_access_token()
         result = {}
         result["Authorization"] = f"Bearer {self._config.get('access_token')}"
         return result
@@ -53,9 +54,13 @@ class MarketoAuthenticator:
         Returns:
             bool: True if token is valid and not near expiration, False otherwise.
         """
+        self.logger.info("++++++++++++ACCESS TOKEN")
+        self.logger.info(self._config.get("access_token"))
         access_token = self._config.get("access_token")
         now = round(datetime.now(datetime.UTC).timestamp())
         expires_in = self._config.get("expires_in")
+        self.logger.info("++++++++++++EXPIRES IN")
+        self.logger.info(expires_in)
         if expires_in is not None:
             expires_in = int(expires_in)
         if not access_token:
@@ -85,11 +90,13 @@ class MarketoAuthenticator:
                 f"Failed OAuth login, response was '{token_response.text()}'. {ex}"
             )
         token_json = token_response.json()
+        self.logger.info("++++++++++++++++++TOKEN_JSON")
+        self.logger.info(token_json)
         # Log the refresh_token
-        self.logger.info(f"Latest refresh token: {token_json['refresh_token']}")
+        # self.logger.info(f"Latest refresh token: {token_json['refresh_token']}")
         self.access_token = token_json["access_token"]
         self._config["access_token"] = token_json["access_token"]
-        self._config["refresh_token"] = token_json["refresh_token"]
+        self._config["token_type"] = token_json["token_type"]
         now = round(datetime.now(datetime.UTC).timestamp())
         self._config["expires_in"] = now + token_json["expires_in"]
 
