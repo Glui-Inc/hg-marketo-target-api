@@ -33,7 +33,7 @@ class ApiSink(HotglueBaseSink):
         client_id = os.environ.get("client_id")
         secret_id = os.environ.get("secret_id")
         # url = "GET <Identity URL>/oauth/token?grant_type=client_credentials&client_id=<Client Id>&client_secret=<Client Secret>"
-        url = f"https://api.playrcart.com/oauth-token?test=apitest&grant_type=client_credentials&client_id={client_id}&client_secret={secret_id}"
+        url = f"https://api.playrcart.com/oauth-token.php?test=apitest&grant_type=client_credentials&client_id={client_id}&client_secret={secret_id}"
         return MarketoAuthenticator(self._target, self.auth_state, url)
     
     # @property
