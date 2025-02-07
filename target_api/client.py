@@ -122,3 +122,14 @@ class ApiSink(HotglueBaseSink):
             self.logger.info(f"cURL: {curl}")
             error = {"status_code": response.status_code, "body": msg}
             raise FatalAPIError(error)
+        
+    @property
+    def http_headers(self) -> dict:
+        """Return the http headers needed."""
+        headers = {
+            "accept": "application/json",
+            "revision": "2023-07-15",
+            "content-type": "application/json",
+        }
+        headers.update(self.authenticator.auth_headers or {})
+        return headers
