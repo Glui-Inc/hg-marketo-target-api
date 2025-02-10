@@ -138,5 +138,5 @@ class ApiSink(HotglueBaseSink):
         headers.update(self.authenticator.auth_headers or {})
         self.logger.info("++++++++++++++++++++ HEADERS 2")
         self.logger.info(headers)
-        headers["Authorization"] = "Bearer 1234567890"
+        # headers["Authorization"] = "Bearer 1234567890"
         return headers
